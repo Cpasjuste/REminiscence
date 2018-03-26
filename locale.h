@@ -46,11 +46,11 @@ struct Locale {
 	static const uint8_t _stringsTableDE[];
 	static const uint8_t _stringsTableSP[];
 
-	Version _ver;
+	int _ver;
 	const char **_textsTable;
 	const uint8_t *_stringsTable;
 
-	Locale(Version ver);
+	Locale(int ver);
 	const char *get(int id) const;
 };
 

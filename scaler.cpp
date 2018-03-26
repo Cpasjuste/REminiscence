@@ -129,6 +129,11 @@ const Scaler _internalScaler = {
 	scaleNx,
 };
 
+#ifdef __SWITCH__
+const Scaler *findScaler(const char *name) {
+	return 0;
+}
+#else
 static DynLib *dynLib;
 
 static const char *kSoSym = "getScaler";
@@ -142,3 +147,4 @@ const Scaler *findScaler(const char *name) {
 	}
 	return 0;
 }
+#endif

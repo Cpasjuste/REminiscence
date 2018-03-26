@@ -7,7 +7,7 @@
 #include "locale.h"
 
 
-Locale::Locale(Version ver)
+Locale::Locale(int ver)
 	: _ver(ver) {
 	switch (_ver) {
 	case LANG_FR:
