@@ -638,7 +638,11 @@ void SystemStub_SDL::prepareGraphics() {
 		SDL_SetWindowIcon(_window, icon);
 		SDL_FreeSurface(icon);
 	}
+#ifdef __SWITCH__
+	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
+#else
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+#endif
 	SDL_RenderSetLogicalSize(_renderer, windowW, windowH);
 	_texture = SDL_CreateTexture(_renderer, kPixelFormat, SDL_TEXTUREACCESS_STREAMING, _texW, _texH);
 	_fmt = SDL_AllocFormat(kPixelFormat);

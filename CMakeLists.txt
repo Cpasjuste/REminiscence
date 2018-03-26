@@ -34,8 +34,9 @@ elseif (BUILD_NX)
     #####################
     # NX PLATORM
     #####################
+    list(REMOVE_ITEM RE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
     list(REMOVE_ITEM RE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/dynlib.cpp)
-    list(APPEND RE_SRC switch.c)
+    list(APPEND RE_SRC main_switch.cpp switch.c)
     list(APPEND RE_CFLAGS -D__SWITCH__
             -I${DEVKITPRO}/portlibs/switch/include/SDL2
             )
