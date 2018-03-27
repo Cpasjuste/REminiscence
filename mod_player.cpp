@@ -26,7 +26,11 @@ struct ModPlayer_impl {
 		memset(&_settings, 0, sizeof(_settings));
 		ModPlug_GetSettings(&_settings);
 		_settings.mFlags = MODPLUG_ENABLE_OVERSAMPLING | MODPLUG_ENABLE_NOISE_REDUCTION;
+#ifdef __SWITCH__
+        _settings.mChannels = 2;
+#else
 		_settings.mChannels = 1;
+#endif
 		_settings.mBits = 16;
 		_settings.mFrequency = rate;
 		_settings.mResamplingMode = MODPLUG_RESAMPLE_FIR;
