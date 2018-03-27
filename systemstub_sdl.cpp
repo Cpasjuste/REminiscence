@@ -15,11 +15,12 @@
 #define JOY_KEY_DOWN	15
 #define JOY_KEY_LEFT	12
 #define JOY_KEY_RIGHT	14
-#define JOY_KEY_SPACE	0	// A
-#define JOY_KEY_SHIFT	1	// B
-#define JOY_KEY_ENTER	2	// X
+#define JOY_KEY_ENTER	0	// A
+#define JOY_KEY_SPACE	1	// B
+#define JOY_KEY_SHIFT	2	// X
 #define JOY_KEY_BACK	3	// Y
 #define JOY_KEY_ESC		10	// PLUS
+#define JOY_KEY_SCALE   11  // MINUS
 
 static const int kAudioHz = 48000;
 #else
@@ -396,6 +397,15 @@ void SystemStub_SDL::processEvent(const SDL_Event &ev, bool &paused) {
 			case JOY_KEY_ESC:
 				_pi.escape = pressed;
 				break;
+			/*
+            case JOY_KEY_SCALE:
+				_scaleFactor++;
+				if(_scaleFactor > _scaler->factorMax) {
+                	_scaleFactor = _scaler->factorMin;
+                }
+                changeGraphics(_fullscreen, _scaleFactor);
+                break;
+            */
 			}
 		}
 		break;
@@ -685,7 +695,11 @@ void SystemStub_SDL::prepareGraphics() {
 	const int windowH = _screenH * _scaleFactor;
 	int flags = 0;
 	if (_fullscreen) {
+#ifdef __SWITCH__
+        flags |= SDL_WINDOW_FULLSCREEN;
+#else
 		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
 	}
 	_window = SDL_CreateWindow(_caption, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowW, windowH, flags);
 	SDL_Surface *icon = SDL_LoadBMP(kIconBmp);
@@ -697,8 +711,8 @@ void SystemStub_SDL::prepareGraphics() {
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
 #else
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-#endif
 	SDL_RenderSetLogicalSize(_renderer, windowW, windowH);
+#endif
 	_texture = SDL_CreateTexture(_renderer, kPixelFormat, SDL_TEXTUREACCESS_STREAMING, _texW, _texH);
 	_fmt = SDL_AllocFormat(kPixelFormat);
 	forceGraphicsRedraw();

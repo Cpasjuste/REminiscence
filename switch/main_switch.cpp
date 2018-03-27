@@ -128,44 +128,6 @@ static void initOptions() {
 	}
 }
 
-static void parseScaler(char *name, ScalerParameters *scalerParameters) {
-	struct {
-		const char *name;
-		int type;
-	} scalers[] = {
-		{ "point", kScalerTypePoint },
-		{ "linear", kScalerTypeLinear },
-		{ "scale", kScalerTypeInternal },
-		{ 0, -1 }
-	};
-	bool found = false;
-	char *sep = strchr(name, '@');
-	if (sep) {
-		*sep = 0;
-	}
-	for (int i = 0; scalers[i].name; ++i) {
-		if (strcmp(scalers[i].name, name) == 0) {
-			scalerParameters->type = (ScalerType)scalers[i].type;
-			found = true;
-			break;
-		}
-	}
-	if (!found) {
-		char libname[32];
-		snprintf(libname, sizeof(libname), "scaler_%s", name);
-		const Scaler *scaler = findScaler(libname);
-		if (scaler) {
-			scalerParameters->type = kScalerTypeExternal;
-			scalerParameters->scaler = scaler;
-		} else {
-			warning("Scaler '%s' not found, using default", libname);
-		}
-	}
-	if (sep) {
-		scalerParameters->factor = atoi(sep + 1);
-	}
-}
-
 int main(int argc, char *argv[]) {
 
 	consoleDebugInit(debugDevice_SVC);
@@ -177,9 +139,8 @@ int main(int argc, char *argv[]) {
 
 	bool fullscreen = true;
 	ScalerParameters scalerParameters = ScalerParameters::defaults();
-	scalerParameters.factor = 1;
-	scalerParameters.type = kScalerTypeExternal;
-	scalerParameters.scaler = NULL;
+	scalerParameters.factor = 2;
+	scalerParameters.type = kScalerTypePoint;
 
 	int forcedLanguage = -1;
 	int demoNum = -1;
@@ -220,7 +181,7 @@ int main(int argc, char *argv[]) {
 			fullscreen = true;
 			break;
 		case 5:
-			parseScaler(optarg, &scalerParameters);
+			//parseScaler(optarg, &scalerParameters);
 			break;
 		case 6: {
 				static const struct {

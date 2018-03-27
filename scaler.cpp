@@ -125,7 +125,11 @@ static void scaleNx(int factor, uint32_t *dst, int dstPitch, const uint32_t *src
 const Scaler _internalScaler = {
 	SCALER_TAG,
 	"scaleNx",
+#ifdef __SWITCH__
+	1, 3,
+#else
 	2, 4,
+#endif
 	scaleNx,
 };
 
