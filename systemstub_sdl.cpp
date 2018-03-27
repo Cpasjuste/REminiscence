@@ -23,14 +23,15 @@
 
 static const int kAudioHz = 48000;
 #else
-#define JOY_KEY_UP 		-1
-#define JOY_KEY_DOWN	-1
-#define JOY_KEY_LEFT	-1
-#define JOY_KEY_RIGHT	-1
-#define JOY_KEY_0		0
-#define JOY_KEY_1		1
-#define JOY_KEY_2		2
-#define JOY_KEY_3		3
+#define JOY_KEY_UP 		96
+#define JOY_KEY_DOWN	97
+#define JOY_KEY_LEFT	98
+#define JOY_KEY_RIGHT	99
+#define JOY_KEY_SPACE	0
+#define JOY_KEY_SHIFT	1
+#define JOY_KEY_ENTER	2
+#define JOY_KEY_BACK	3
+#define JOY_KEY_ESC		4
 
 static const int kAudioHz = 22050;
 #endif

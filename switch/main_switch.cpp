@@ -174,8 +174,13 @@ int main(int argc, char *argv[]) {
 	const char *dataPath = "DATA";
 	const char *savePath = ".";
 	int levelNum = 0;
-	bool fullscreen = false;
+
+	bool fullscreen = true;
 	ScalerParameters scalerParameters = ScalerParameters::defaults();
+	scalerParameters.factor = 1;
+	scalerParameters.type = kScalerTypeExternal;
+	scalerParameters.scaler = NULL;
+
 	int forcedLanguage = -1;
 	int demoNum = -1;
 	if (argc == 2) {

@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.0)
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # delete cmake cache folder before changing this options
-option(BUILD_SDL1 "Build with SDL1 support" OFF)
 option(BUILD_SDL2 "Build with SDL2 support" OFF)
 option(BUILD_PSP2 "Build with PSP2 support" OFF)
 option(BUILD_NX "Build with NX (SWITCH) support" ON)
@@ -36,7 +35,7 @@ elseif (BUILD_NX)
     #####################
     list(REMOVE_ITEM RE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
     list(REMOVE_ITEM RE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/dynlib.cpp)
-    list(APPEND RE_SRC main_switch.cpp switch.c)
+    list(APPEND RE_SRC switch/main_switch.cpp switch/switch.c)
     list(APPEND RE_CFLAGS -D__SWITCH__
             -I${DEVKITPRO}/portlibs/switch/include/SDL2
             )
@@ -48,6 +47,9 @@ elseif (BUILD_SDL2)
     #####################
     # SDL2 PLATORM
     #####################
+    find_package(SDL2 REQUIRED)
+    list(APPEND RE_INC ${SDL2_INCLUDE_DIRS})
+    list(APPEND RE_LDFLAGS ${SDL2_LIBRARIES} dl)
 elseif (BUILD_SDL1)
     #####################
     # SDL1 PLATORM
@@ -78,5 +80,5 @@ if (BUILD_NX)
     add_custom_target(${CMAKE_PROJECT_NAME}.nro
             DEPENDS ${CMAKE_PROJECT_NAME}.elf
             COMMAND nacptool --create "${CMAKE_PROJECT_NAME}" "Cpasjuste" "1.0" ${CMAKE_PROJECT_NAME}.nacp
-            COMMAND elf2nro ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.nro --icon=${CMAKE_SOURCE_DIR}/data/switch/icon.jpg --nacp=${CMAKE_PROJECT_NAME}.nacp)
+            COMMAND elf2nro ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.nro --icon=${CMAKE_SOURCE_DIR}/switch/icon.jpg --nacp=${CMAKE_PROJECT_NAME}.nacp)
 endif (BUILD_NX)
