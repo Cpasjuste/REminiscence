@@ -10,7 +10,30 @@
 #include "systemstub.h"
 #include "util.h"
 
+#ifdef __SWITCH__
+#define JOY_KEY_UP 		13
+#define JOY_KEY_DOWN	15
+#define JOY_KEY_LEFT	12
+#define JOY_KEY_RIGHT	14
+#define JOY_KEY_SPACE	0	// A
+#define JOY_KEY_SHIFT	1	// B
+#define JOY_KEY_ENTER	2	// X
+#define JOY_KEY_BACK	3	// Y
+#define JOY_KEY_ESC		10	// PLUS
+
+static const int kAudioHz = 48000;
+#else
+#define JOY_KEY_UP 		-1
+#define JOY_KEY_DOWN	-1
+#define JOY_KEY_LEFT	-1
+#define JOY_KEY_RIGHT	-1
+#define JOY_KEY_0		0
+#define JOY_KEY_1		1
+#define JOY_KEY_2		2
+#define JOY_KEY_3		3
+
 static const int kAudioHz = 22050;
+#endif
 
 static const char *kIconBmp = "icon.bmp";
 
@@ -333,17 +356,44 @@ void SystemStub_SDL::processEvent(const SDL_Event &ev, bool &paused) {
 		if (_joystick) {
 			const bool pressed = (ev.jbutton.state == SDL_PRESSED);
 			switch (ev.jbutton.button) {
-			case 0:
+			case JOY_KEY_UP:
+				_pi.dirMask &= ~(PlayerInput::DIR_UP | PlayerInput::DIR_DOWN);
+				if(pressed) {
+					_pi.dirMask |= PlayerInput::DIR_UP;
+				}
+				break;
+			case JOY_KEY_DOWN:
+				_pi.dirMask &= ~(PlayerInput::DIR_UP | PlayerInput::DIR_DOWN);
+				if(pressed) {
+					_pi.dirMask |= PlayerInput::DIR_DOWN;
+				}
+				break;
+			case JOY_KEY_LEFT:
+				_pi.dirMask &= ~(PlayerInput::DIR_LEFT | PlayerInput::DIR_RIGHT);
+				if(pressed) {
+					_pi.dirMask |= PlayerInput::DIR_LEFT;
+				}
+				break;
+			case JOY_KEY_RIGHT:
+				_pi.dirMask &= ~(PlayerInput::DIR_LEFT | PlayerInput::DIR_RIGHT);
+				if(pressed) {
+					_pi.dirMask |= PlayerInput::DIR_RIGHT;
+				}
+				break;
+			case JOY_KEY_SPACE:
 				_pi.space = pressed;
 				break;
-			case 1:
+			case JOY_KEY_SHIFT:
 				_pi.shift = pressed;
 				break;
-			case 2:
+			case JOY_KEY_ENTER:
 				_pi.enter = pressed;
 				break;
-			case 3:
+			case JOY_KEY_BACK:
 				_pi.backspace = pressed;
+				break;
+			case JOY_KEY_ESC:
+				_pi.escape = pressed;
 				break;
 			}
 		}
