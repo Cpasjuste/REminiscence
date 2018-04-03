@@ -125,10 +125,12 @@ void SystemStub_SDL::init(const char *title, int w, int h, bool fullscreen, Scal
 	_joystick = 0;
 	_controller = 0;
 	if (SDL_NumJoysticks() > 0) {
+#ifndef __SWITCH__ // TODO: gamecontroller not working !?
 		SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
 		if (SDL_IsGameController(kJoystickIndex)) {
 			_controller = SDL_GameControllerOpen(kJoystickIndex);
 		}
+#endif
 		if (!_controller) {
 			_joystick = SDL_JoystickOpen(kJoystickIndex);
 		}
